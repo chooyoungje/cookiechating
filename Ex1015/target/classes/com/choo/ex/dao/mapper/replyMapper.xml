@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Reply"> 
+ 
+ 	<insert id="replywrite" parameterType="reply">
+ 		INSERT INTO REPLY(CNUMBER,CBNUMBER,REPLYER,REPLY,RDATE)
+ 			VALUES(CNUMBER_SEQ.NEXTVAL,#{cbnumber},#{replyer},#{reply},SYSDATE)
+ 	</insert>
+ 
+	<select id="replylist"  parameterType="int" resultType="reply">
+		SELECT * FROM REPLY WHERE CBNUMBER=#{bnum}
+	</select>
+	
+	<delete id="replydelete">
+		DELETE FROM REPLY WHERE CNUMBER=#{cnumber}
+	</delete>
+	
+	
+	
+	
+	
+ </mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

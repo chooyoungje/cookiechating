@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Member"> 
+	<!--아이디 중복체크 -->
+	<select id="idcheck" parameterType="String" resultType="String">
+		SELECT MID FROM MEMBER WHERE MID =#{mid}
+	</select>
+	
+	<!--회원가입  -->
+	<insert id="memberjoin" parameterType="member">
+		INSERT INTO MEMBER(MID,MPASSWORD,MNAME,MBIRTH,MEMAIL,MADDRESS1,M
+			ADDRESS2,MADDRESS3,MADDRESS4,MPHONE,MPHOTO)
+				VALUES(#{mid},#{mpassword},#{mname},#{mbirth},#{memail},#{maddress1},
+					#{maddress2},#{maddress3},#{maddress4},#{mphone},#{mphotoname})
+	</insert>
+	
+	
+	<!--로그인  -->
+	<select id="memberlogin" parameterType="member" resultType="String">
+		SELECT MID FROM MEMBER WHERE MID =#{mid} AND MPASSWORD=#{mpassword}
+	</select>
+
+ 	<!-- 전체 회원 수 구함 -->
+ 	<select id="listcount" resultType="int">
+ 		SELECT COUNT(MID) FROM MEMBER
+ 	</select>
+ 	
+ 	<!--RN을 기준으로 시작행과 끝행 범위에 있는 회원가져오기  -->
+ 	<select id="memberlistpaging" parameterType="page" resultType="member">
+ 		SELECT * FROM (SELECT M.*,ROW_NUMBER() OVER(ORDER BY MID DESC)
+ 		 AS RN FROM MEMBER M) WHERE RN BETWEEN #{startrow} AND #{endrow}
+ 	</select>	
+ 	
+ 	
+ 	
+ 	<!--회원삭제 -->
+	<delete id="memberdelete" parameterType="String">
+		DELETE FROM MEMBER  WHERE MID=#{mid}
+	</delete>
+	
+	
+ 	<!-- 회원 상세 조회 -->
+ 	<select id="memberview" parameterType="String" resultType="member">
+ 		SELECT * FROM MEMBER WHERE MID=#{mid}
+ 	</select>
+	
+	<!--회원 수정 업데이트  -->
+	<update id="memberupdate" parameterType="member">
+		UPDATE MEMBER SET MPASSWORD=#{mpassword},MNAME=#{mname},MBIRTH=#{mbirth},
+			MEMAIL=#{memail},MADDRESS1=#{maddress1},MADDRESS2=#{maddress2},
+			MADDRESS3=#{maddress3},MADDRESS4=#{maddress4},MPHONE=#{mphone},MPHOTO=#{mphotoname} WHERE MID=#{mid}
+	</update>
+	
+	<select id="kakaologin" parameterType="String" resultType="String">
+		SELECT MID FROM MEMBER WHERE KAKAOID=#{kakaoid}
+	</select>
+	
+	<select id="naverlogin" parameterType="String" resultType="String">
+		SELECT MID FROM MEMBER WHERE NAVERID=#{naverid}
+	</select>
+	
+	<insert id="kakaojoin" parameterType="member">
+		INSERT INTO MEMBER(MID,MPASSWORD,MNAME,MBIRTH,MEMAIL,MADDRESS1,MADDRESS2,MADDRESS3,MADDRESS4,MPHONE,MPHOTO,KAKAOID)
+			VALUES(#{mid},#{mpassword},#{mname},#{mbirth},#{memail},#{maddress1},
+			#{maddress2},#{maddress3},#{maddress4},#{mphone},#{mphotoname},#{kakaoid})
+	</insert>
+	
+	<insert id="naverjoin" parameterType="member">
+		INSERT INTO MEMBER(MID,MPASSWORD,MNAME,MBIRTH,MEMAIL,MADDRESS1,MADDRESS2,MADDRESS3,MADDRESS4,MPHONE,MPHOTO,NAVERID)
+			VALUES(#{mid},#{mpassword},#{mname},#{mbirth},#{memail},#{maddress1},#{maddress2},#{maddress3},
+			#{maddress4},#{mphone},#{mphotoname},#{naverid})
+	</insert>	
+	
+ </mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

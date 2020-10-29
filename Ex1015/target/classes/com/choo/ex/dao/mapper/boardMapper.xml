@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Board"> 
+	
+	<!-- 글 갯수가 몇개냐 -->
+	<select id="listcount" resultType="int">
+		SELECT COUNT(BNUMBER) FROM BOARD
+	</select>
+	
+	<!--RN을 기준으로 시작행과 끝행 범위에 있는 글 가져오기  -->
+ 	<select id="boardlistpaging" parameterType="page" resultType="board">
+ 		SELECT * FROM (SELECT B.*,ROW_NUMBER() OVER(ORDER BY BNUMBER DESC)
+ 		 AS RN FROM BOARD B) WHERE RN BETWEEN #{startrow} AND #{endrow}
+ 	</select>
+ 	
+ 	<!-- 글 쓰기 -->
+	<insert id="boardwrite" parameterType="board">
+		INSERT INTO BOARD(BNUMBER,BWRITER,BTITLE,BCONTENTS,BDATE,BHITS,BFILENAME)
+			VALUES(BNUM_SEQ.NEXTVAL,#{bwriter},#{btitle},#{bcontents},SYSDATE,0,#{bfilename})
+	</insert>
+	
+	<!--글 상세 조회  -->
+	<select id="boardview" parameterType="int" resultType="board">
+		SELECT * FROM BOARD WHERE BNUMBER = #{bnum}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="bhits" parameterType="int">
+		UPDATE BOARD SET BHITS=BHITS+1 WHERE BNUMBER=#{bnum}
+	</update>
+	
+	<!-- 글 삭제  -->
+	<delete id="boarddelete" parameterType="int">
+		DELETE FROM BOARD WHERE BNUMBER = #{bnumber}
+	</delete>
+	
+	<!--글 수정  -->
+	<select id="boardupdate" parameterType="int" resultType="board">
+		SELECT * FROM BOARD WHERE BNUMBER = #{bnumber}
+	</select>
+	
+	<!--글 수정 프로세스 -->
+	<update id="boardupdatep" parameterType="board">
+		UPDATE BOARD SET BTITLE=#{btitle},BCONTENTS=#{bcontents},
+			BFILENAME=#{bfilename},BDATE=SYSDATE WHERE BNUMBER=#{bnumber}
+	</update>
+	
+	<!--조회순 정렬  -->
+ 	<select id="boardlistpagingarrange"  resultType="board">
+ 		SELECT * FROM BOARD ORDER BY BHITS DESC
+ 	</select>
+	
+	<!--검색 -->
+	<select id="boardsearch" parameterType="java.util.HashMap" resultType="board">
+			SELECT * FROM BOARD
+			<include refid="search"></include>
+	</select>
+	
+	<sql id="search">
+		<choose>
+			<when test="searchtype=='searchtitle'">
+				WHERE BTITLE LIKE '%'||#{keyword} ||'%'
+			</when>
+			<when test="searchtype=='searchwriter'">
+				WHERE BWRITER LIKE '%'||#{keyword} ||'%'
+			</when>
+		</choose>
+	</sql>
+	
+	<!--글 상세 조회(마이페이지)  -->
+	<select id="boardview2" parameterType="String" resultType="board">
+		SELECT * FROM BOARD WHERE BWRITER = #{mid}
+	</select>
+	
+	<select id="myboardcount" parameterType="String" resultType="int">
+		SELECT COUNT(BNUMBER) FROM BOARD WHERE BWRITER = #{mid}
+	</select>
+	
+	<select id="myboardlist" parameterType="String" resultType="board">
+			SELECT * FROM BOARD WHERE BWRITER = #{bwriter}
+	</select>
+	
+ </mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
