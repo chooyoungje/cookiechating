@@ -18,7 +18,6 @@ public class ReplyService {
 	public ModelAndView mav;
 	//댓글 작성
 	public List<ReplyDTO> replywrite(ReplyDTO rdto) {
-		int result =rdao.replywrite(rdto);
 		int bnum=rdto.getCbnumber();
 		List<ReplyDTO> rlist =rdao.replylist(bnum);
 		return rlist;
@@ -27,7 +26,6 @@ public class ReplyService {
 	//댓글 삭제
 	public List<ReplyDTO> replydelete(ReplyDTO rdto) {
 		int cbnumber =rdto.getCbnumber(); 
-		int result =rdao.replydelete(rdto);
 		List<ReplyDTO> rlist =rdao.replylist(cbnumber);
 		return rlist;
 	}

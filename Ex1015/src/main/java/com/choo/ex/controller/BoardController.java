@@ -36,8 +36,6 @@ public class BoardController {
 	//네이버 통합검색
 	@RequestMapping(value="/naversearch")
 	public ModelAndView naversearch(@ModelAttribute("nsearch") String nsearch) {
-		String[] t = {nsearch,"2","2","2","2"};
-		ntsa.main(t);
 		return mav;
 	}
 	
